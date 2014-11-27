@@ -155,7 +155,6 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Actions\AboutAction.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.8.0.cs" />
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.7.1.cs" />

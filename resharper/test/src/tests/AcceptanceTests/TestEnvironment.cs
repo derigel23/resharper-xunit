@@ -2,21 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using JetBrains.Application;
+using JetBrains.Application.BuildScript.Application.Zones;
+using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TestFramework;
 using JetBrains.TestFramework.Application.Zones;
-using JetBrains.Threading;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
+    [ZoneDefinition]
+    public interface ITestsOnUnitTesting : ITestsZone, IRequire<IUnitTestingZone>
+    {
+    }
+
     /// <summary>
     /// Test environment. Must be in the root namespace of the tests
     /// </summary>
     [SetUpFixture]
-    public class TestEnvironmentAssembly : PlatformTestEnvironmentAssembly<ITestsZone>
+    public class TestEnvironmentAssembly : PlatformTestEnvironmentAssembly<ITestsOnUnitTesting>
     {
         /// <summary>
         /// Gets the assemblies to load into test environment.
