@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using JetBrains.Application;
+using JetBrains.TestFramework;
+using JetBrains.TestFramework.Application.Zones;
 using JetBrains.Threading;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
@@ -14,7 +16,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
     /// Test environment. Must be in the root namespace of the tests
     /// </summary>
     [SetUpFixture]
-    public class TestEnvironmentAssembly : ReSharperTestEnvironmentAssembly
+    public class TestEnvironmentAssembly : PlatformTestEnvironmentAssembly<ITestsZone>
     {
         /// <summary>
         /// Gets the assemblies to load into test environment.
@@ -34,20 +36,22 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             var sw = Stopwatch.StartNew();
 
             base.SetUp();
-            ReentrancyGuard.Current.Execute(
-                "LoadAssemblies",
-                () => Shell.Instance.GetComponent<AssemblyManager>().LoadAssemblies(
-                    GetType().Name, GetAssembliesToLoad()));
+            // TODO: !!!
+          //ReentrancyGuard.Current.Execute(
+            //    "LoadAssemblies",
+            //    () => Shell.Instance.GetComponent<AssemblyManager>().LoadAssemblies(
+            //        GetType().Name, GetAssembliesToLoad()));
 
             Console.WriteLine("Startup took: {0}", sw.Elapsed);
         }
 
         public override void TearDown()
         {
-            ReentrancyGuard.Current.Execute(
-                "UnloadAssemblies",
-                () => Shell.Instance.GetComponent<AssemblyManager>().UnloadAssemblies(
-                    GetType().Name, GetAssembliesToLoad()));
+          // TODO: !!!
+            //ReentrancyGuard.Current.Execute(
+            //    "UnloadAssemblies",
+            //    () => Shell.Instance.GetComponent<AssemblyManager>().UnloadAssemblies(
+            //        GetType().Name, GetAssembliesToLoad()));
             base.TearDown();
         }
     }

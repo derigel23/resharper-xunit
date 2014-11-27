@@ -12,14 +12,15 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
             get { return "xunit2"; }
         }
 
-        protected override IEnumerable<string> AssemblyReferences
+      protected override IEnumerable<string> GetReferencedAssemblies()
+      {
+        foreach (var assembly in base.GetReferencedAssemblies())
         {
-            get
-            {
-                yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.abstractions.dll");
-                yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.core.dll");
-                yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.execution.dll");
-            }
+          yield return assembly;
         }
+        yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.abstractions.dll");
+        yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.core.dll");
+        yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.execution.dll");
+      }
     }
 }

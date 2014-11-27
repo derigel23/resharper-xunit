@@ -11,11 +11,12 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework;
 using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
+using JetBrains.ReSharper.UnitTestExplorer;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
-using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 using NUnit.Framework;
+using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
@@ -70,12 +71,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 this.listener = listener;
             }
 
-            public void Accept(XmlElement packet, RemoteChannel remoteChannel)
-            {
-                packet.RemoveAttribute("path");
+          public void Accept(RemoteTask remoteTask, IDictionary<string, string> attributes, XmlReader reader, IRemoteChannel remoteChannel)
+          {
+                attributes.Remove("path");
                 try
                 {
-                    listener.Output.WriteLine(packet.OuterXml);
+                    //listener.Output.WriteLine(packet.OuterXml);
                 }
                 catch
                 {
@@ -83,7 +84,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 }
             }
 
-            public string PacketName { get { return "cache-folder"; } }
+          public string PacketName { get { return "cache-folder"; } }
         }
 
         protected abstract void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session,
@@ -97,7 +98,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             msgListener.Run = session;
             msgListener.Strategy = new OutOfProcessUnitTestRunStrategy(GetRemoteTaskRunnerInfo());
 
-            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(),
+            var runController = CreateTaskRunnerHostController(
+                Solution.GetComponent<ILogger>(),
+                Solution.GetComponent<IUnitTestLaunchManager>(),
+                Solution.GetComponent<IUnitTestResultManager>(),
                 Solution.GetComponent<IUnitTestAgentManager>(), output, session,
                 Solution.GetComponent<UnitTestServer>().PortNumber, msgListener);
             msgListener.RunController = runController;
@@ -123,7 +127,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 using (var assemblyLoader = new AssemblyLoader())
                 {
                     assemblyLoader.RegisterPath(BaseTestDataPath.Combine(RelativeTestDataPath).FullPath);
-                    metadataExplorer.ExploreAssembly(testProject, metadataAssembly, tests.Add, new ManualResetEvent(false));
+                  // TODO: no observer!
+                    metadataExplorer.ExploreAssembly(testProject, metadataAssembly, null);
                 }
             }
 
@@ -135,12 +140,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             get { return EmptyList<string>.InstanceList; }
         }
 
-        protected abstract IUnitTestMetadataExplorer MetadataExplorer { get; }
+        protected abstract XunitTestMetadataExplorer MetadataExplorer { get; }
         protected abstract RemoteTaskRunnerInfo GetRemoteTaskRunnerInfo();
 
-        protected virtual ITaskRunnerHostController CreateTaskRunnerHostController(IUnitTestLaunchManager launchManager, IUnitTestAgentManager agentManager, TextWriter output, IUnitTestLaunch launch, int port, TestRemoteChannelMessageListener msgListener)
+        protected virtual ITaskRunnerHostController CreateTaskRunnerHostController(ILogger logger, IUnitTestLaunchManager launchManager, IUnitTestResultManager resultManager, IUnitTestAgentManager agentManager, TextWriter output, IUnitTestLaunch launch, int port, TestRemoteChannelMessageListener msgListener)
         {
-            return new ProcessTaskRunnerHostController(launchManager, agentManager, launch, port);
+            return new ProcessTaskRunnerHostController(logger, launchManager, resultManager, agentManager, launch, port);
         }
     }
 }
