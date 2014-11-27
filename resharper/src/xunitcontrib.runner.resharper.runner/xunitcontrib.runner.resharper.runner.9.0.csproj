@@ -179,6 +179,7 @@
     <Compile Include="XunitTestClassTask.cs" />
     <Compile Include="XunitTestMethodTask.cs" />
     <Compile Include="XunitTestTheoryTask.cs" />
+    <Compile Include="ZoneMarker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.xunitcontrib.runner.resharper.runner.9.0.config" />

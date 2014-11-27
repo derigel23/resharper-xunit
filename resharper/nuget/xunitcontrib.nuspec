@@ -3,7 +3,7 @@
   <metadata>
     <id>CitizenMatt.Xunit</id>
     <title>xUnit.net Test Support for ReSharper 9</title>
-    <version>3.0.1</version>
+    <version>3.0.1.3</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
@@ -24,22 +24,22 @@ Known issues:
     <copyright>Copyright 2014 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
-      <dependency id="wave" version="[1.0]" />
+      <dependency id="wave" version="[1.0,2.0)" />
     </dependencies>
     <tags>resharper unittest xunit</tags>
   </metadata>
   <files>
     <!-- 8.2 plugin -->
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunitcontrib.runner.resharper.provider.9.0.dll"
-          target="DotFiles" />
+          target="lib\net" />
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunitcontrib.runner.resharper.runner.9.0.dll"
-          target="DotFiles" />
+          target="lib\net" />
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunit.dll"
-          target="DotFiles" />
+          target="lib\net" />
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunit.abstractions.dll"
-          target="DotFiles" />
+          target="lib\net" />
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunit.runner.utility.dll"
-          target="DotFiles" />
+          target="lib\net" />
 
     <!-- Settings and annotations -->
     <file src="..\src\xunitcontrib.runner.resharper.provider\templates.dotSettings"
